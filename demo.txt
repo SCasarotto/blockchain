@@ -1,0 +1,34 @@
+Blockchain Demo
+
+1. cd into blockchain repo
+2. In terminal window launch blockchain.py with python3 on port 5000
+3. In a second terminal window launch blockain.py with python3 on port 5001
+4. To register the chain across the multiple running instances, we register the nodes with each other do the following commands:
+
+curl -X POST -H "Content-Type: application/json" -d '{"nodes": ["http://127.0.0.1:5001"]}' "http://127.0.0.1:5000/nodes/register"
+
+curl -X POST -H "Content-Type: application/json" -d '{"nodes": ["http://127.0.0.1:5000"]}' "http://127.0.0.1:5001/nodes/register"
+
+5. Verify that both of the blocks have just the single genesis block:
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/chain"
+
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5001/chain"
+
+
+6. Mine a new block on the chain with:
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/mine"
+
+7. Check both chains and see that the mined block exists on only the 5000 chain:
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/chain"
+
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5001/chain"
+
+8.  Resolve the chain on both ports:
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/nodes/resolve"
+
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5001/nodes/resolve"
+
+9. Check both chains again and now see that the additional mined block exists on both chains!
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5000/chain"
+
+curl -X GET -H "Content-Type: application/json" "http://127.0.0.1:5001/chain"
